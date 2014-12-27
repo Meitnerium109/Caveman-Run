@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.mygdx.game.RunnerGame;
+import com.mygdx.game.BaseGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -14,6 +14,6 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useAccelerometer = false;
 		config.useCompass = false;
 		
-		initialize(new RunnerGame(), config);
+		initialize(new BaseGame(), config);
 	}
 }
