@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -25,6 +26,7 @@ public class MainMenu extends RunnerGame{
 	
 	Label caveman;
 	Label andrew;
+	public static Music backgroundMusic;
 	
 	public MainMenu(Game game){
 		super(game);
@@ -32,6 +34,10 @@ public class MainMenu extends RunnerGame{
 
 	@Override
 	public void show(){
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Movement Proposition.mp3"));
+		backgroundMusic.setVolume(0.3f);
+		backgroundMusic.play();
+		
 		super.show();
 		
 		scoreText.setPosition(-100, -100);
@@ -76,8 +82,8 @@ public class MainMenu extends RunnerGame{
 		
 		labelStyle = new LabelStyle(font, Color.BLACK);
 		
-		andrew = new Label("Andrew Lau", labelStyle);
-		andrew.setFontScale(0.4f);
+		andrew = new Label("Andrew Lau. Music and Sound Effects from Incompetech.com and http://www.freesfx.co.uk/", labelStyle);
+		andrew.setFontScale(0.3f);
 		stage.addActor(caveman);
 		stage.addActor(andrew);
 		

@@ -12,10 +12,12 @@ import Objects.Player;
 import Objects.Rock;
 import Objects.RollingBoulder;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -66,12 +68,19 @@ public class RunnerGame implements Screen {
 	public static int gameSpeed = 600; // How fast the tiles are moving
 	public static int originalGameSpeed = 600;
 
+	public static Sound jumpSound;
+	public static Sound deathSound;
+	
 	public RunnerGame(Game game) {
 		this.game = game;
 	}
 
 	@Override
 	public void show() {
+	
+		jumpSound = Gdx.audio.newSound(Gdx.files.internal("Jump Sound Effect.mp3"));
+		deathSound = Gdx.audio.newSound(Gdx.files.internal("Death Sound.mp3"));
+		
 		stage = new Stage(new ExtendViewport(A.gameWidth, A.gameHeight));
 		Gdx.input.setInputProcessor(stage);
 
@@ -148,7 +157,7 @@ public class RunnerGame implements Screen {
 					createBoulder(1300, Floor.FLOOR_HEIGHT - 10, 1);
 					createBoulder(1700, Floor.FLOOR_HEIGHT - 10, 1);
 				} else {
-					obstacleTimer = Math.random() * 1f + 1.8f;
+					obstacleTimer = Math.random() * 1f + 1f;
 					createBunny(960, Floor.FLOOR_HEIGHT - 10).stateTime = (float) Math
 							.random();
 					createBunny(960 + 25, Floor.FLOOR_HEIGHT - 10).stateTime = (float) Math
@@ -208,7 +217,7 @@ public class RunnerGame implements Screen {
 	// This function should be called when the player dies
 	public void playerDeath() {
 		if (!playerDead) {
-
+			deathSound.play();
 			playerDead = true;
 			resetDeadCaveman((int) player.getX(), (int) player.getY());
 			gameSpeed = 0;
@@ -423,6 +432,7 @@ public class RunnerGame implements Screen {
 		for (Floor floor : floors) {
 			floor.dispose();
 		}
+		jumpSound.dispose();
 	}
 
 	@Override
@@ -494,6 +504,9 @@ public class RunnerGame implements Screen {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
+				if(!player.touchingDown){
+					jumpSound.play(1.0f);
+				}
 				player.touchingDown = true;
 				return true;
 			}

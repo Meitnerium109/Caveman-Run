@@ -27,7 +27,7 @@ public class Bunny extends Enemy{
 		setAsTerrain();
 		health = 1;
 		
-		velocityXOffset = 2.5;
+		velocityXOffset = 4.5;
 		
 		texture = A.bunnyHopAnimation;
 		TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth()/FRAME_COLS, texture.getHeight()/FRAME_ROWS);
