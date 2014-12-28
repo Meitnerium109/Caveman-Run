@@ -12,7 +12,6 @@ import Objects.Player;
 import Objects.Rock;
 import Objects.RollingBoulder;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -20,6 +19,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -71,10 +71,24 @@ public class RunnerGame implements Screen {
 	public static Sound jumpSound;
 	public static Sound deathSound;
 	
+	Texture deathTexture = new Texture(Gdx.files.internal("GameOverScreen.png"));
+	
 	public RunnerGame(Game game) {
 		this.game = game;
 	}
 
+	@Override
+	public void dispose() {
+		stage.dispose();
+		player.dispose();
+		for (Floor floor : floors) {
+			floor.dispose();
+		}
+		jumpSound.dispose();
+		deathSound.dispose();
+		font.dispose();
+	}
+	
 	@Override
 	public void show() {
 	
@@ -212,7 +226,7 @@ public class RunnerGame implements Screen {
 					player.velocityY);
 		}
 	}
-
+	
 	// Controls what should happen after the player dies
 	// This function should be called when the player dies
 	public void playerDeath() {
@@ -223,18 +237,18 @@ public class RunnerGame implements Screen {
 			gameSpeed = 0;
 			player.setPosition(960, 1000);
 
-			if (score > highScore) {
-				highScore = (int) (Math.floor(score));
+			deathBackground = new ImageObject(0, 0, deathTexture);
+			stage.addActor(deathBackground);
+
+			if(score > highScore){
+				highScore = (int)score;
 				highscoreText.setText("High Score: " + highScore);
-
-				createDeathScreen(true);
-			} else {
-				createDeathScreen(false);
 			}
-
+			
 		}
 	}
 
+	ImageObject deathBackground;
 	public void createDeathScreen(boolean isHighscore) {
 
 		deathScreen = new DeathScreen((int) Math.floor(score), isHighscore);
@@ -261,6 +275,7 @@ public class RunnerGame implements Screen {
 
 	// Restarts the game. Score is zero and stuff
 	public void restartGame() {
+		deathBackground.remove();
 		gameSpeed = originalGameSpeed;
 		resetDeadCaveman(-100, -64);
 		playerDead = false;
@@ -272,6 +287,30 @@ public class RunnerGame implements Screen {
 			boulders.removeIndex(i);
 			boulder.remove();
 		}
+
+		// Removes all excess obstacles
+		for (int i = 0; i < boulders.size; i++) {
+			Boulder boulder = boulders.get(i);
+			boulders.removeIndex(i);
+			boulder.remove();
+		}
+
+
+		// Removes all excess obstacles
+		for (int i = 0; i < boulders.size; i++) {
+			Boulder boulder = boulders.get(i);
+			boulders.removeIndex(i);
+			boulder.remove();
+		}
+
+
+		// Removes all excess obstacles
+		for (int i = 0; i < boulders.size; i++) {
+			Boulder boulder = boulders.get(i);
+			boulders.removeIndex(i);
+			boulder.remove();
+		}
+
 
 		for (int i = 0; i < rBoulders.size; i++) {
 			RollingBoulder rboulder = rBoulders.get(i);
@@ -306,7 +345,6 @@ public class RunnerGame implements Screen {
 		}
 
 		resetPlayer();
-		removeDeathScreen();
 	}
 
 	public void resetPlayer() {
@@ -426,16 +464,6 @@ public class RunnerGame implements Screen {
 	}
 
 	@Override
-	public void dispose() {
-		stage.dispose();
-		player.dispose();
-		for (Floor floor : floors) {
-			floor.dispose();
-		}
-		jumpSound.dispose();
-	}
-
-	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
 
@@ -443,8 +471,7 @@ public class RunnerGame implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		MainMenu.backgroundMusic.play();
 	}
 
 	@Override

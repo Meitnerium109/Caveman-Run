@@ -28,9 +28,7 @@ public class A {
 	 * Call this function when you end the game
 	 */
 	public static void dispose(){
-		rock1.dispose();
-		boulder1.dispose();
-		bunnyHopAnimation.dispose();
+		
 	}
 	
 }
